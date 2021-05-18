@@ -1,5 +1,7 @@
 package com.example.silenteight.algorithm;
 
+import java.io.IOException;
+
 public abstract class GenderDetectingStrategy {
     protected static final String MALE = "MALE";
     protected static final String FEMALE = "FEMALE";
@@ -8,5 +10,5 @@ public abstract class GenderDetectingStrategy {
     protected static final String MALENAMESFILE = "male";
     protected static final String FEMALENAMESFILE = "female";
 
-    public abstract String detectGenderByName(String name);
+    public abstract String detectGenderByName(String name) throws IOException;
 }

@@ -15,7 +15,7 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
     private long femaleCounter;
 
     @Override
-    public String detectGenderByName(String fullName) {
+    public String detectGenderByName(String fullName) throws IOException {
         checkGender(fullName);
 
         if (maleCounter == femaleCounter) {
@@ -27,7 +27,7 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
         return FEMALE;
     }
 
-    private void checkGender(String fullName) {
+    private void checkGender(String fullName) throws IOException {
         try (JarFile javaFile = new JarFile(JARFILE)) {
             JarEntry maleFileEntry = javaFile.getJarEntry(MALENAMESFILE);
             JarEntry femaleFileEntry = javaFile.getJarEntry(FEMALENAMESFILE);
@@ -51,12 +51,7 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
                         .map(String::toLowerCase)
                         .filter(names::contains)
                         .count();
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

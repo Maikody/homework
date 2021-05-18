@@ -13,8 +13,9 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
     private boolean isFemale;
 
     @Override
-    public String detectGenderByName(String fullName) {
+    public String detectGenderByName(String fullName) throws IOException {
         String firstname = getFirstname(fullName);
+
         checkGender(firstname);
 
         if (isMale && isFemale) {
@@ -30,12 +31,12 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
         return INCONCLUSIVE;
     }
 
-    private String getFirstname(String fullName) {
+    public String getFirstname(String fullName) {
         String[] names = fullName.split("\\s+");
-        return names[0].toLowerCase();
+        return names[0];
     }
 
-    private void checkGender(String name) {
+    public void checkGender(String name) throws IOException {
         try (JarFile jarFile = new JarFile(JARFILE)) {
             JarEntry maleFileEntry = jarFile.getJarEntry(MALENAMESFILE);
             JarEntry femaleFileEntry = jarFile.getJarEntry(FEMALENAMESFILE);
@@ -49,18 +50,13 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
                 isMale = bufferedReaderMale
                         .lines()
                         .map(String::toLowerCase)
-                        .anyMatch(nameInFile -> nameInFile.equals(name));
+                        .anyMatch(nameInFile -> nameInFile.equals(name.toLowerCase()));
 
                 isFemale = bufferedReaderFemale
                         .lines()
                         .map(String::toLowerCase)
-                        .anyMatch(nameInFile -> nameInFile.equals(name));
-
-            } catch (IOException e) {
-                e.printStackTrace();
+                        .anyMatch(nameInFile -> nameInFile.equals(name.toLowerCase()));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
