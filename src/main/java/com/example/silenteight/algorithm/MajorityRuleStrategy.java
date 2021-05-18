@@ -28,11 +28,6 @@ public class MajorityRuleStrategy implements GuessStrategy {
     }
 
     private void checkGender(String fullName) {
-        List<String> names = List.of(fullName.split("\\s+"))
-                .stream()
-                .map(String::toLowerCase)
-                .collect(Collectors.toList());
-
         try (JarFile javaFile = new JarFile("tokens.jar")) {
             JarEntry maleFileEntry = javaFile.getJarEntry("male");
             JarEntry femaleFileEntry = javaFile.getJarEntry("female");
@@ -42,6 +37,8 @@ public class MajorityRuleStrategy implements GuessStrategy {
 
             try (BufferedReader bufferedReaderMale = new BufferedReader(new InputStreamReader(inputMale));
                  BufferedReader bufferedReaderFemale = new BufferedReader(new InputStreamReader(inputFemale))) {
+
+                List<String> names = splitFullName(fullName);
 
                 maleCounter = bufferedReaderMale
                         .lines()
@@ -61,5 +58,12 @@ public class MajorityRuleStrategy implements GuessStrategy {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<String> splitFullName(String fullName) {
+        return List.of(fullName.split("\\s+"))
+                .stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
     }
 }
