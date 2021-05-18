@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/names")
+@RequestMapping("/v1/gender")
 public class NameController {
 
     private final GenderService service;
@@ -18,7 +18,7 @@ public class NameController {
         this.service = service;
     }
 
-    @GetMapping("/gender/{name}/{variant}")
+    @GetMapping("/{name}/{variant}")
     public String guessGender(@PathVariable String name, @PathVariable int variant) {
         return service.guessGender(name, variant);
     }

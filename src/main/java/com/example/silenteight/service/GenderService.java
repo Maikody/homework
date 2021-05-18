@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,20 +35,28 @@ public class GenderService {
     }
 
     public List<String> getAvailableTokens() {
-        InputStream inputMale = getClass().getResourceAsStream("/male");
-        InputStream inputFemale = getClass().getResourceAsStream("/female");
+        try (JarFile javaFile = new JarFile("tokens.jar")) {
+            JarEntry maleFileEntry = javaFile.getJarEntry("male");
+            JarEntry femaleFileEntry = javaFile.getJarEntry("female");
 
-        try (BufferedReader bufferedReaderMale = new BufferedReader(new InputStreamReader(inputMale));
-            BufferedReader bufferedReaderFemale = new BufferedReader(new InputStreamReader(inputFemale))) {
+            InputStream inputMale = javaFile.getInputStream(maleFileEntry);
+            InputStream inputFemale = javaFile.getInputStream(femaleFileEntry);
 
-            List<String> maleNames = bufferedReaderMale.lines().collect(Collectors.toList());
-            List<String> femaleNames = bufferedReaderFemale.lines().collect(Collectors.toList());
+            try (BufferedReader bufferedReaderMale = new BufferedReader(new InputStreamReader(inputMale));
+                 BufferedReader bufferedReaderFemale = new BufferedReader(new InputStreamReader(inputFemale))) {
 
-            List<String> names = new ArrayList<>();
-            names.addAll(maleNames);
-            names.addAll(femaleNames);
+                List<String> maleNames = bufferedReaderMale.lines().collect(Collectors.toList());
+                List<String> femaleNames = bufferedReaderFemale.lines().collect(Collectors.toList());
 
-            return names;
+                List<String> names = new ArrayList<>();
+                names.addAll(maleNames);
+                names.addAll(femaleNames);
+
+                return names;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return Collections.emptyList();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return Collections.emptyList();

@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
 public class MajorityRuleStrategy implements GuessStrategy {
 
@@ -25,24 +28,36 @@ public class MajorityRuleStrategy implements GuessStrategy {
     }
 
     private void checkGender(String fullName) {
-        List<String> names = List.of(fullName.split("\\s+"));
+        List<String> names = List.of(fullName.split("\\s+"))
+                .stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
 
-        InputStream inputMale = getClass().getResourceAsStream("/male");
-        InputStream inputFemale = getClass().getResourceAsStream("/female");
+        try (JarFile javaFile = new JarFile("tokens.jar")) {
+            JarEntry maleFileEntry = javaFile.getJarEntry("male");
+            JarEntry femaleFileEntry = javaFile.getJarEntry("female");
 
-        try (BufferedReader bufferedReaderMale = new BufferedReader(new InputStreamReader(inputMale));
-             BufferedReader bufferedReaderFemale = new BufferedReader(new InputStreamReader(inputFemale))) {
+            InputStream inputMale = javaFile.getInputStream(maleFileEntry);
+            InputStream inputFemale = javaFile.getInputStream(femaleFileEntry);
 
-            maleCounter = bufferedReaderMale
-                    .lines()
-                    .filter(names::contains)
-                    .count();
+            try (BufferedReader bufferedReaderMale = new BufferedReader(new InputStreamReader(inputMale));
+                 BufferedReader bufferedReaderFemale = new BufferedReader(new InputStreamReader(inputFemale))) {
 
-            femaleCounter = bufferedReaderFemale
-                    .lines()
-                    .filter(names::contains)
-                    .count();
+                maleCounter = bufferedReaderMale
+                        .lines()
+                        .map(String::toLowerCase)
+                        .filter(names::contains)
+                        .count();
 
+                femaleCounter = bufferedReaderFemale
+                        .lines()
+                        .map(String::toLowerCase)
+                        .filter(names::contains)
+                        .count();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
