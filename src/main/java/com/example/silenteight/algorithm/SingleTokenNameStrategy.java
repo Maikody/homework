@@ -7,41 +7,41 @@ import java.io.InputStreamReader;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class OneTokenStrategy implements GuessStrategy {
+public class SingleTokenNameStrategy extends GenderDetectingStrategy {
+
     private boolean isMale;
     private boolean isFemale;
 
     @Override
-    public String guessGender(String fullName) {
+    public String detectGenderByName(String fullName) {
         String firstname = getFirstname(fullName);
         checkGender(firstname);
 
         if (isMale && isFemale) {
-            return "INCONCLUSIVE";
+            return INCONCLUSIVE;
         }
         if (isFemale) {
-            return "FEMALE";
+            return FEMALE;
         }
         if (isMale) {
-            return "MALE";
+            return MALE;
         }
 
-        return "INCONCLUSIVE";
+        return INCONCLUSIVE;
     }
 
-    private String getFirstname(String name) {
-        String[] names = name.split("\\s+");
-        name = names[0].toLowerCase();
-        return name;
+    private String getFirstname(String fullName) {
+        String[] names = fullName.split("\\s+");
+        return names[0].toLowerCase();
     }
 
     private void checkGender(String name) {
-        try (JarFile javaFile = new JarFile("tokens.jar")) {
-            JarEntry maleFileEntry = javaFile.getJarEntry("male");
-            JarEntry femaleFileEntry = javaFile.getJarEntry("female");
+        try (JarFile jarFile = new JarFile(JARFILE)) {
+            JarEntry maleFileEntry = jarFile.getJarEntry(MALENAMESFILE);
+            JarEntry femaleFileEntry = jarFile.getJarEntry(FEMALENAMESFILE);
 
-            InputStream inputMale = javaFile.getInputStream(maleFileEntry);
-            InputStream inputFemale = javaFile.getInputStream(femaleFileEntry);
+            InputStream inputMale = jarFile.getInputStream(maleFileEntry);
+            InputStream inputFemale = jarFile.getInputStream(femaleFileEntry);
 
             try (BufferedReader bufferedReaderMale = new BufferedReader(new InputStreamReader(inputMale));
                  BufferedReader bufferedReaderFemale = new BufferedReader(new InputStreamReader(inputFemale))) {

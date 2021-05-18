@@ -9,28 +9,28 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
-public class MajorityRuleStrategy implements GuessStrategy {
+public class MajorityRuleStrategy extends GenderDetectingStrategy {
 
     private long maleCounter;
     private long femaleCounter;
 
     @Override
-    public String guessGender(String fullName) {
+    public String detectGenderByName(String fullName) {
         checkGender(fullName);
 
         if (maleCounter == femaleCounter) {
-            return "INCONCLUSIVE";
+            return INCONCLUSIVE;
         }
         if (maleCounter > femaleCounter) {
-            return "MALE";
+            return MALE;
         }
-        return "FEMALE";
+        return FEMALE;
     }
 
     private void checkGender(String fullName) {
-        try (JarFile javaFile = new JarFile("tokens.jar")) {
-            JarEntry maleFileEntry = javaFile.getJarEntry("male");
-            JarEntry femaleFileEntry = javaFile.getJarEntry("female");
+        try (JarFile javaFile = new JarFile(JARFILE)) {
+            JarEntry maleFileEntry = javaFile.getJarEntry(MALENAMESFILE);
+            JarEntry femaleFileEntry = javaFile.getJarEntry(FEMALENAMESFILE);
 
             InputStream inputMale = javaFile.getInputStream(maleFileEntry);
             InputStream inputFemale = javaFile.getInputStream(femaleFileEntry);
