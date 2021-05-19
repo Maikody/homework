@@ -57,7 +57,7 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
         }
     }
 
-    private boolean checkIfStreamContainsName(String name, BufferedReader bufferedReader) {
+    public boolean checkIfStreamContainsName(String name, BufferedReader bufferedReader) {
         return bufferedReader
                 .lines()
                 .map(String::toLowerCase)

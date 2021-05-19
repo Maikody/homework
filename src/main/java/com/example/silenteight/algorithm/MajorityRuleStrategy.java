@@ -20,7 +20,7 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
         return getGender();
     }
 
-    private String getGender() {
+    public String getGender() {
         if (maleCounter == femaleCounter) {
             return INCONCLUSIVE;
         }
@@ -30,7 +30,7 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
         return FEMALE;
     }
 
-    private void checkGender(String fullName) throws IOException {
+    public void checkGender(String fullName) throws IOException {
         try (JarFile javaFile = new JarFile(JARFILE)) {
             JarEntry maleFileEntry = javaFile.getJarEntry(MALENAMESFILE);
             JarEntry femaleFileEntry = javaFile.getJarEntry(FEMALENAMESFILE);
@@ -43,14 +43,14 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
 
                 List<String> names = splitFullName(fullName);
 
-                maleCounter = countNameOccurrencesInStream(bufferedReaderMale, names);
+                maleCounter = countNameOccurrencesInStream(names, bufferedReaderMale);
 
-                femaleCounter = countNameOccurrencesInStream(bufferedReaderFemale, names);
+                femaleCounter = countNameOccurrencesInStream(names, bufferedReaderFemale);
             }
         }
     }
 
-    private long countNameOccurrencesInStream(BufferedReader bufferedReaderMale, List<String> names) {
+    public long countNameOccurrencesInStream(List<String> names, BufferedReader bufferedReaderMale) {
         return bufferedReaderMale
                 .lines()
                 .map(String::toLowerCase)
@@ -58,10 +58,12 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
                 .count();
     }
 
-    private List<String> splitFullName(String fullName) {
+    public List<String> splitFullName(String fullName) {
         return List.of(fullName.split("\\s+"))
                 .stream()
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
     }
+
+
 }
