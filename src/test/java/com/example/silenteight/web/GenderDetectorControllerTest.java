@@ -2,7 +2,6 @@ package com.example.silenteight.web;
 
 import com.example.silenteight.domain.Gender;
 import com.example.silenteight.service.GenderDetectorService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -26,7 +26,6 @@ class GenderDetectorControllerTest {
 
     @MockBean
     private GenderDetectorService service;
-
 
     @Test
     void shouldDetectGenderByName() throws Exception {
@@ -47,7 +46,7 @@ class GenderDetectorControllerTest {
         mockMvc.perform(get("/v1/gender/tokens"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.hasSize(4)));
+                .andExpect(jsonPath("$", hasSize(4)));
     }
 
     @Test
@@ -57,6 +56,6 @@ class GenderDetectorControllerTest {
         mockMvc.perform(get("/v1/gender/tokenstream"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.hasSize(4)));
+                .andExpect(jsonPath("$", hasSize(4)));
     }
 }

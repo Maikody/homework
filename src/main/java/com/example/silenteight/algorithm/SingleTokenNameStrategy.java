@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import static com.example.silenteight.domain.Gender.*;
+
 public class SingleTokenNameStrategy extends GenderDetectingStrategy {
 
     private boolean isMale;
@@ -21,19 +23,6 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
         checkGender(firstname);
 
         return getGender();
-    }
-
-    private Gender getGender() {
-        if (isMale && isFemale) {
-            return Gender.INCONCLUSIVE;
-        }
-        if (isFemale) {
-            return Gender.FEMALE;
-        }
-        if (isMale) {
-            return Gender.MALE;
-        }
-        return Gender.INCONCLUSIVE;
     }
 
     public String getFirstname(String fullName) {
@@ -64,5 +53,18 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
                 .lines()
                 .map(String::toLowerCase)
                 .anyMatch(nameInFile -> nameInFile.equals(name.toLowerCase()));
+    }
+
+    private Gender getGender() {
+        if (isMale && isFemale) {
+            return INCONCLUSIVE;
+        }
+        if (isFemale) {
+            return FEMALE;
+        }
+        if (isMale) {
+            return MALE;
+        }
+        return INCONCLUSIVE;
     }
 }

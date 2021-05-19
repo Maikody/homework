@@ -11,6 +11,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
+import static com.example.silenteight.domain.Gender.*;
+
 public class MajorityRuleStrategy extends GenderDetectingStrategy {
 
     private long maleCounter;
@@ -24,12 +26,12 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
 
     public Gender getGender() {
         if (maleCounter == femaleCounter) {
-            return Gender.INCONCLUSIVE;
+            return INCONCLUSIVE;
         }
         if (maleCounter > femaleCounter) {
-            return Gender.MALE;
+            return MALE;
         }
-        return Gender.FEMALE;
+        return FEMALE;
     }
 
     public void checkGender(String fullName) throws IOException {
