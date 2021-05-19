@@ -1,5 +1,7 @@
 package com.example.silenteight.algorithm;
 
+import com.example.silenteight.domain.Gender;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,19 +17,19 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
     private long femaleCounter;
 
     @Override
-    public String detectGenderByName(String fullName) throws IOException {
+    public Gender detectGenderByName(String fullName) throws IOException {
         checkGender(fullName);
         return getGender();
     }
 
-    public String getGender() {
+    public Gender getGender() {
         if (maleCounter == femaleCounter) {
-            return INCONCLUSIVE;
+            return Gender.INCONCLUSIVE;
         }
         if (maleCounter > femaleCounter) {
-            return MALE;
+            return Gender.MALE;
         }
-        return FEMALE;
+        return Gender.FEMALE;
     }
 
     public void checkGender(String fullName) throws IOException {
@@ -64,6 +66,4 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
     }
-
-
 }

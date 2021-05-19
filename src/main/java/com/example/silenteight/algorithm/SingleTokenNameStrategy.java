@@ -1,5 +1,7 @@
 package com.example.silenteight.algorithm;
 
+import com.example.silenteight.domain.Gender;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +15,7 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
     private boolean isFemale;
 
     @Override
-    public String detectGenderByName(String fullName) throws IOException {
+    public Gender detectGenderByName(String fullName) throws IOException {
         String firstname = getFirstname(fullName);
 
         checkGender(firstname);
@@ -21,21 +23,21 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
         return getGender();
     }
 
-    private String getGender() {
+    private Gender getGender() {
         if (isMale && isFemale) {
-            return INCONCLUSIVE;
+            return Gender.INCONCLUSIVE;
         }
         if (isFemale) {
-            return FEMALE;
+            return Gender.FEMALE;
         }
         if (isMale) {
-            return MALE;
+            return Gender.MALE;
         }
-        return INCONCLUSIVE;
+        return Gender.INCONCLUSIVE;
     }
 
     public String getFirstname(String fullName) {
-        String[] names = fullName.split("\\s+");
+        String[] names = fullName.trim().split("\\s+");
         return names[0];
     }
 

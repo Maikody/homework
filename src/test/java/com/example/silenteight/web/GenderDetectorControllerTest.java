@@ -1,12 +1,12 @@
 package com.example.silenteight.web;
 
+import com.example.silenteight.domain.Gender;
 import com.example.silenteight.service.GenderDetectorService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -33,7 +33,7 @@ class GenderDetectorControllerTest {
         String name = "Robert";
         int variant = 1;
 
-        when(service.detectGenderByName(name, variant)).thenReturn("MALE");
+        when(service.detectGenderByName(name, variant)).thenReturn(Gender.MALE);
 
         mockMvc.perform(get("/v1/gender/{name}/{variant}", name, variant))
                 .andDo(print())

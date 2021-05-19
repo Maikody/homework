@@ -1,5 +1,6 @@
 package com.example.silenteight.web;
 
+import com.example.silenteight.domain.Gender;
 import com.example.silenteight.service.GenderDetectorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class GenderDetectorController {
     }
 
     @GetMapping("/{name}/{variant}")
-    public ResponseEntity<String> detectGenderByName(@PathVariable String name, @PathVariable int variant) throws IOException {
+    public ResponseEntity<Gender> detectGenderByName(@PathVariable String name, @PathVariable int variant) throws IOException {
         return new ResponseEntity<>(service.detectGenderByName(name, variant), HttpStatus.OK);
     }
 
