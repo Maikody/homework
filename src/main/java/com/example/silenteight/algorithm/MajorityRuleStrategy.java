@@ -17,7 +17,10 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
     @Override
     public String detectGenderByName(String fullName) throws IOException {
         checkGender(fullName);
+        return getGender();
+    }
 
+    private String getGender() {
         if (maleCounter == femaleCounter) {
             return INCONCLUSIVE;
         }
@@ -40,19 +43,19 @@ public class MajorityRuleStrategy extends GenderDetectingStrategy {
 
                 List<String> names = splitFullName(fullName);
 
-                maleCounter = bufferedReaderMale
-                        .lines()
-                        .map(String::toLowerCase)
-                        .filter(names::contains)
-                        .count();
+                maleCounter = countNameOccurrencesInStream(bufferedReaderMale, names);
 
-                femaleCounter = bufferedReaderFemale
-                        .lines()
-                        .map(String::toLowerCase)
-                        .filter(names::contains)
-                        .count();
+                femaleCounter = countNameOccurrencesInStream(bufferedReaderFemale, names);
             }
         }
+    }
+
+    private long countNameOccurrencesInStream(BufferedReader bufferedReaderMale, List<String> names) {
+        return bufferedReaderMale
+                .lines()
+                .map(String::toLowerCase)
+                .filter(names::contains)
+                .count();
     }
 
     private List<String> splitFullName(String fullName) {

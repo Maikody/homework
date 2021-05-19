@@ -18,21 +18,20 @@ import java.util.stream.Stream;
 @Service
 public class GenderDetectorService {
 
-    private static final String JARFILE = "tokenss.jar";
+    private static final String JARFILE = "tokens.jar";
     private static final String MALENAMESFILE = "male";
     private static final String FEMALENAMESFILE = "female";
-    private GenderDetectingStrategy detectingStrategy;
 
     public String detectGenderByName(String name, int variant) throws IOException {
-        setDetectingStrategy(variant);
+        GenderDetectingStrategy detectingStrategy = setDetectingStrategy(variant);
         return detectingStrategy.detectGenderByName(name);
     }
 
-    private void setDetectingStrategy(int variant) {
+    public GenderDetectingStrategy setDetectingStrategy(int variant) {
         if (variant == 2) {
-            detectingStrategy = new MajorityRuleStrategy();
+            return new MajorityRuleStrategy();
         } else {
-            detectingStrategy = new SingleTokenNameStrategy();
+            return new SingleTokenNameStrategy();
         }
     }
 

@@ -18,6 +18,10 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
 
         checkGender(firstname);
 
+        return getGender();
+    }
+
+    private String getGender() {
         if (isMale && isFemale) {
             return INCONCLUSIVE;
         }
@@ -27,7 +31,6 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
         if (isMale) {
             return MALE;
         }
-
         return INCONCLUSIVE;
     }
 
@@ -47,16 +50,17 @@ public class SingleTokenNameStrategy extends GenderDetectingStrategy {
             try (BufferedReader bufferedReaderMale = new BufferedReader(new InputStreamReader(inputMale));
                  BufferedReader bufferedReaderFemale = new BufferedReader(new InputStreamReader(inputFemale))) {
 
-                isMale = bufferedReaderMale
-                        .lines()
-                        .map(String::toLowerCase)
-                        .anyMatch(nameInFile -> nameInFile.equals(name.toLowerCase()));
+                isMale = checkIfStreamContainsName(name, bufferedReaderMale);
 
-                isFemale = bufferedReaderFemale
-                        .lines()
-                        .map(String::toLowerCase)
-                        .anyMatch(nameInFile -> nameInFile.equals(name.toLowerCase()));
+                isFemale = checkIfStreamContainsName(name, bufferedReaderFemale);
             }
         }
+    }
+
+    private boolean checkIfStreamContainsName(String name, BufferedReader bufferedReader) {
+        return bufferedReader
+                .lines()
+                .map(String::toLowerCase)
+                .anyMatch(nameInFile -> nameInFile.equals(name.toLowerCase()));
     }
 }
