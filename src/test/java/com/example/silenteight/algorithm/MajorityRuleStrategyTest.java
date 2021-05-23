@@ -25,14 +25,14 @@ class MajorityRuleStrategyTest {
     }
 
     @Test
-    void shouldCountOccurrencesInStream() {
+    void shouldCountNameOccurrences() {
         List<String> splitFullName = getSplitFullName();
         String maleNames = getMaleNames();
 
         InputStream inputStream = new ByteArrayInputStream(maleNames.getBytes(StandardCharsets.UTF_8));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        long occurrences = strategy.countNameOccurrencesInStream(splitFullName, bufferedReader);
+        long occurrences = strategy.countNameOccurrences(splitFullName, bufferedReader);
 
         assertEquals(2, occurrences);
     }

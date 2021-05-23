@@ -4,7 +4,6 @@ import com.example.silenteight.algorithm.GenderDetectingStrategy;
 import com.example.silenteight.algorithm.MajorityRuleStrategy;
 import com.example.silenteight.algorithm.SingleTokenNameStrategy;
 import com.example.silenteight.domain.Gender;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -17,12 +16,10 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.example.silenteight.Application.*;
+
 @Service
 public class GenderDetectorService {
-
-    private static final String JARFILE = "tokens.jar";
-    private static final String MALENAMESFILE = "male";
-    private static final String FEMALENAMESFILE = "female";
 
     public Gender detectGenderByName(String name, int variant) throws IOException {
         GenderDetectingStrategy detectingStrategy = setDetectingStrategy(variant);

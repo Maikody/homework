@@ -31,7 +31,7 @@ class SingleTokenNameStrategyTest {
         InputStream inputStream = new ByteArrayInputStream(names.getBytes(StandardCharsets.UTF_8));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        boolean containsName = strategy.checkIfStreamContainsName("Michal", bufferedReader);
+        boolean containsName = strategy.checkNameExistence("Michal", bufferedReader);
 
         assertTrue(containsName);
     }
@@ -43,7 +43,7 @@ class SingleTokenNameStrategyTest {
         InputStream inputStream = new ByteArrayInputStream(names.getBytes(StandardCharsets.UTF_8));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        boolean containsName = strategy.checkIfStreamContainsName("Anna", bufferedReader);
+        boolean containsName = strategy.checkNameExistence("Anna", bufferedReader);
 
         assertTrue(containsName);
     }
